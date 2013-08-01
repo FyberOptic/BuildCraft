@@ -25,7 +25,6 @@ public class PipeItemsQuartz extends Pipe implements IPipeTransportItemsHook {
 
 	public PipeItemsQuartz(int itemID) {
 		super(new PipeTransportItems(), itemID);
-
 	}
 
 	@Override
@@ -40,22 +39,17 @@ public class PipeItemsQuartz extends Pipe implements IPipeTransportItemsHook {
 	}
 
 	@Override
-	public void readjustSpeed(TravelingItem item) {
-		if (item.getSpeed() > Utils.pipeNormalSpeed) {
-			item.setSpeed(item.getSpeed() - Utils.pipeNormalSpeed / 4.0F);
-		}
-
-		if (item.getSpeed() < Utils.pipeNormalSpeed) {
-			item.setSpeed(Utils.pipeNormalSpeed);
-		}
-	}
-
-	@Override
 	public LinkedList<ForgeDirection> filterPossibleMovements(LinkedList<ForgeDirection> possibleOrientations, Position pos, TravelingItem item) {
 		return possibleOrientations;
 	}
 
 	@Override
 	public void entityEntered(TravelingItem item, ForgeDirection orientation) {
+		readjustSpeed(item);
+	}
+
+	@Override
+	public void readjustSpeed(TravelingItem item) {
+		item.setSpeed(Math.min(Math.max(Utils.pipeNormalSpeed, item.getSpeed()) * 1.5f, Utils.pipeNormalSpeed * 15F));
 	}
 }
